@@ -4,7 +4,7 @@ Currently the game can play a round of 5 tricks and determine the winner of a tr
 There is a function to draw the trick at its current state as well as the player's hand when player is making a card selection
 
 
-# Work in progress with the following items next on the to-do list:
+Next steps:
 - Trump decision making round
 - Computer player's logic for trump selection
 - Computer player's logic for card selection
