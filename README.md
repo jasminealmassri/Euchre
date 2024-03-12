@@ -10,7 +10,7 @@ Update March 12th 2024:
 - Next step to finish trump decision round is to add the second round where players can make it any suit
 
 Next steps:
-- Trump decision making round
+- Trump decision making round (in progress)
 - Computer player's logic for trump selection
 - Computer player's logic for card selection
 - Input validation for user's card selection, card chosen must adhere to game rules
