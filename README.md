@@ -7,7 +7,7 @@ There is a function to draw the trick at its current state as well as the player
 
 Update March 12th 2024:
 - Added first round trump decision-making round (where a specific card is flipped up)
-- Next step to finish trump decision round is to add the second round where players can make it any suit
+- Next step to finish trump decision round is to add the second round where players can make trump any suit
 
 Next steps:
 - Trump decision making round (in progress)
