@@ -102,9 +102,26 @@ int main()
 	unsigned team2_score = 0;
 	unsigned tricks_won = 0;
 	unsigned tricks_lost = 0;
-	unsigned dealer = 2;
+	unsigned dealer = 1;
 
-	play_round(dealer, deck, trump, team1_score, team2_score, tricks_won, tricks_lost);
+	vector<vector<Card>> placeholder( 5, vector<Card>{{"",""}} );
+
+	// step 1 shuffle deck
+	shuffle_deck(deck);
+
+	// step 2 deal hands
+	vector<vector<Card>> hands = deal_hands(deck);
+
+	// first pass decision
+	pair<string, unsigned> decision = first_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
+
+	if (decision.first == "all_passed")
+	{
+		// TO DO
+		// second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
+	}
+
+	// play_round(dealer, trump, deck, team1_score, team2_score, tricks_won, tricks_lost);
 
 
 

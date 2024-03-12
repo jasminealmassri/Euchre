@@ -14,6 +14,11 @@ void populate_deck(vector<Card>& deck)
 	}
 }
 
+void shuffle_deck(vector<Card>& deck)
+{
+	random_shuffle(deck.begin(), deck.end());
+}
+
 void make_euchre_deck(vector<Card>& deck)
 {
 	for (vector<Card>::iterator it = deck.begin(); it != deck.end(); it++)
@@ -125,7 +130,6 @@ void draw_hand(vector<Card> hand)
 	}
 }
 
-
 Card user_move(vector<Card>& hand, vector<Card> trick)
 {
 	unsigned choice{};
@@ -143,6 +147,207 @@ Card user_move(vector<Card>& hand, vector<Card> trick)
 	//trick.push_back(chosen_card);
 	return chosen_card;
 }
+
+// deals 6 hands from deck and gives back the hands vector
+vector<vector<Card>> deal_hands(vector<Card>& deck)
+{
+	
+	// step 2 deal cards
+	vector<vector<Card>> hands;
+
+	// placeholder
+	hands.push_back(vector<Card>{ {"", ""} });
+
+	// deal 4 hands with the indices matching the players e.g. 1 to 4
+	for (unsigned i = 0; i < 4; i++)
+	{
+		hands.push_back(deal_cards(deck, 5));
+	}
+	return hands;
+}
+
+bool player_prompt_pick_it_up(vector<Card> hand, unsigned dealer)
+{
+	char decision;
+	bool pick_it_up;
+	if (dealer == 1)
+	{
+		cout << "Want to pick it up? (y/n): ";
+	}
+	else if (dealer == 3)
+	{
+		cout << "Want your partner to pick it up (you play alone)? (y/n): ";
+	}
+	else
+	{
+		cout << "Want dealer to pick it up? (y/n): ";
+	}
+	cin >> decision;
+	decision = (char)tolower(decision);
+	while (decision != 'y' && decision != 'n')
+	{
+		cout << "Invalid entry, please enter y or n: ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> decision;
+		decision = (char)tolower(decision);
+
+	}
+	// flush anything remaining
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	
+	pick_it_up = decision ==  'y' ? true : false;
+
+	
+	return pick_it_up;
+	
+}
+
+bool computer_decision_pick_it_up(vector<Card> hand, unsigned dealer)
+{
+	// for now lets just have to be random
+	//unsigned random_selection = rand() % 2;
+
+	//return random_selection == '1' ? true : false;
+	// for now I will just make them not decide
+	return false;
+}
+
+Card player_dealer_pick_up(vector<Card> hand, Card flipped_card)
+{
+	unsigned discard_choice;
+	// Takes card new card
+	cout << "Choose a card to discard (1-5): ";
+	cin >> discard_choice;
+	while (discard_choice < 1 || discard_choice > 5)
+	{
+		cout << "Invalid card choice, please enter a number from 1 to 5: ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> discard_choice;
+	}
+
+	// Make discard_choice correspond to zero based hand index
+	discard_choice -= 1;
+
+
+	// Erases card from hand and adds new card to hand
+	Card discard_card;
+	discard_card = hand[discard_choice];
+
+	// DEBUG
+	cout << "You chose " << hand[discard_choice].face_value << " of " << hand[discard_choice].suit << " to discard\n";
+	
+
+	hand.erase(hand.begin() + discard_choice);
+	hand.push_back(flipped_card);
+
+	// DEBUG
+	draw_hand(hand);
+	cout << "The card discarded is the " << discard_card.face_value << " of " << discard_card.suit << endl;
+	
+
+	// Returns discarded card
+	return discard_card;
+}
+
+Card computer_dealer_pick_up(vector<Card> hand, Card flipped_card)
+{
+	// Random for now
+	unsigned discard_choice = (rand() % 5) + 1;
+	
+	// Erases card from hand
+	Card discard_card;
+	discard_card = hand[discard_choice];
+	hand.erase(hand.begin() + discard_choice);
+
+	// Returns discarded card
+	return discard_card;
+
+}
+
+
+pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost)
+{
+
+	// does shuffling need to happen here? 
+	// Makes a vector for the purpose of using draw, it contains only one card but puts it in front of dealer
+	vector<Card> decision_table(5, Card({"",""}));
+
+	// flip top card
+	Card flipped_card = deck[0];
+	decision_table[dealer] = flipped_card;
+	draw_v2(decision_table, dealer, "", your_team_score, enemy_team_score, tricks_won, tricks_lost);
+	
+	// Ask each player if they want dealer to pick it up
+	unsigned starting_player = dealer == 4 ? 1 : dealer + 1;
+	unsigned current_player = starting_player;
+
+	bool pick_it_up = false;
+	// unsigned player_who_decided_trump = 0;
+
+	Card discarded_card;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (current_player == 1)
+		{
+			draw_hand(hands[1]);
+			pick_it_up = player_prompt_pick_it_up(hands[1], dealer);
+			
+			if (pick_it_up)
+			{
+				if (dealer == 1)
+				{
+					discarded_card = player_dealer_pick_up(hands[1], flipped_card);
+				}
+				else
+				{
+					discarded_card = computer_dealer_pick_up(hands[dealer], flipped_card);
+				}
+				
+				
+				// I have to return the card here before I move on
+				deck.erase(deck.begin());
+				deck.push_back(discarded_card);
+
+				// return trump
+				return { flipped_card.suit, 1 };
+			}
+		}
+		else
+		{
+			pick_it_up = computer_decision_pick_it_up(hands[current_player], dealer);
+
+			if (pick_it_up)
+			{
+				if (dealer == 1)
+				{
+					discarded_card = player_dealer_pick_up(hands[1], flipped_card);
+				}
+				else
+				{
+					discarded_card = computer_dealer_pick_up(hands[dealer], flipped_card);
+				}
+
+				// I have to return the card here before I move on
+				deck.erase(deck.begin());
+				deck.push_back(discarded_card);
+
+				return { flipped_card.suit, current_player };
+			}
+		}
+		
+		// advance player cursor
+		current_player = current_player == 4 ? 1 : current_player + 1;
+	}
+	// If this makes it through all the players and no one picked up
+	return { "all_passed" , 0 };
+
+	// REMOVE ONCE FINISHED
+	// return { "", 0 };
+}
+
 
 Card computer_move(vector<Card>& hand, vector<Card>& trick, string trump)
 {
@@ -385,7 +590,6 @@ void draw(vector<Card> trick, unsigned starting_player, string trump, unsigned y
 
 }
 
-
 // I made this one because I dont want it to reshuffle, I want it to just print each position
 void draw_v2(vector<Card> trick, unsigned starting_player, string trump, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost)
 {
@@ -520,7 +724,6 @@ void draw_v2(vector<Card> trick, unsigned starting_player, string trump, unsigne
 
 }
 
-
 unsigned determine_who_won(vector<Card> trick, string trump, string leading_suit)
 {
 	// holds the rank, the lower the index the higher the winning power of the card
@@ -634,25 +837,13 @@ void play_trick(unsigned starting_player, string trump, vector<vector<Card>>& ha
 	draw_v2(trick, starting_player, trump, team1_score, team2_score, tricks_won, tricks_lost);
 }
 
-
-void play_round(unsigned dealer, vector<Card>& deck, string trump, unsigned& team1_score, unsigned& team2_score, unsigned& tricks_won, unsigned& tricks_lost)
+void play_round(unsigned dealer, string trump, vector<Card>& deck, vector<vector<Card>>& hands, unsigned& team1_score, unsigned& team2_score, unsigned& tricks_won, unsigned& tricks_lost)
 {
-	// step 1 shuffle deck
-	random_shuffle(deck.begin(), deck.end());
-
-	// step 2 deal cards
-	vector<vector<Card>> hands;
+	
 
 	vector<Card> discard_deck;
 
-	// placeholder
-	hands.push_back(vector<Card>{ {"", ""} });
 
-	// deal 4 hands with the indices matching the players e.g. 1 to 4
-	for (unsigned i = 0; i < 4; i++)
-	{
-		hands.push_back(deal_cards(deck, 5));
-	}
 
 	unsigned starting_player = dealer == 4 ? 1 : dealer + 1;
 
@@ -706,8 +897,6 @@ void play_round(unsigned dealer, vector<Card>& deck, string trump, unsigned& tea
 	{
 		deck.push_back(discard_deck[i]);
 	}
-
-
 
 }
 
