@@ -8,7 +8,7 @@ There is a function to draw the trick at its current state as well as the player
 Update March 18th 2024:
 - Added second round trump prompt and decision-making for both player and computer
 - Currently doesn't force dealer to choose trump if everyone passes, if everyone passes on the second round the game exits
-- Next round is to set up continous playing of the game until one team reaches a score of 10
+- Next round is to set up continous playing of the game until one team reaches a score of 10, and test playing
 - After that computer logic has to be added so computer isn't just making random decisions on passing/trump/cards to play
 
 Update March 12th 2024:
