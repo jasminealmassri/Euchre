@@ -49,7 +49,7 @@ int main()
 	//cout << "Hand4 is:\n";
 	//print_cards(hand4);
 
-	string trump = "Spades";
+	// string trump = "Spades";
 
 	//vector<Card> trick;
 	// vector<Card> trick(5, Card({"",""}));
@@ -102,7 +102,7 @@ int main()
 	unsigned team2_score = 0;
 	unsigned tricks_won = 0;
 	unsigned tricks_lost = 0;
-	unsigned dealer = 1;
+	unsigned dealer = 4;
 
 	vector<vector<Card>> placeholder( 5, vector<Card>{{"",""}} );
 
@@ -117,11 +117,22 @@ int main()
 
 	if (decision.first == "all_passed")
 	{
+		decision = second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
 		// TO DO
 		// second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
 	}
+	if (decision.first == "all_passed")
+	{
+		cout << "Everyone passed, play again" << endl;
+		// Just gonna make it exit for now
+		return EXIT_SUCCESS;
+		// second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
+	}
 
-	// play_round(dealer, trump, deck, team1_score, team2_score, tricks_won, tricks_lost);
+	string trump = decision.first;
+
+	// gotta put this in a loop where it keeps playing until the end of the game
+	play_round(dealer, trump, deck, hands, team1_score, team2_score, tricks_won, tricks_lost);
 
 
 

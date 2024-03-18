@@ -348,6 +348,163 @@ pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Ca
 	// return { "", 0 };
 }
 
+bool player_prompt_make_it_trump(vector<Card> hand)
+{
+	char choice;
+	cout << "Do you want to choose trump? Y/N" << endl;
+	cin >> choice;
+	choice = toupper(choice);
+	while (choice != 'Y' && choice != 'N')
+	{
+		cout << "Invalid choice, please enter 'Y' to choose trump, or 'N' to pass: ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> choice;
+	}
+	// if they entered anything extra in the strem
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	
+	bool decision = choice == 'Y' ? true : false;
+	return decision;
+
+}
+
+pair<string, unsigned> player_chooses_trump(vector<Card> const& hand)
+{
+	unordered_map<string, unsigned> eligible_suits;
+	unsigned choice_counter{1};
+	for (Card const& c : hand)
+	{
+		auto insert_took_place = eligible_suits.insert({ c.suit, choice_counter });
+		if (insert_took_place.second)
+			choice_counter++;
+	}
+	cout << "Please choose a suit to make it: " << endl;
+	
+	for (pair<string,unsigned> const& p : eligible_suits)
+	{
+		cout << p.second << ": " << p.first << endl;
+	}
+	
+	int choice;
+	cin >> choice;
+	while (!cin || choice < 1 || choice >= eligible_suits.size())
+	{
+		cout << "Invalid choice. Please choose a number between 1 and " << eligible_suits.size() << ": ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> choice;
+	}
+	for (pair<string, unsigned> p : eligible_suits)
+	{
+		if (p.second == choice)
+		{
+			//debug
+			cout << "You chose " << p.first << endl;
+			return { p.first, 1 };
+
+		}
+			
+	}
+
+	// Debug
+	//set<string>::iterator it = eligible_suits.begin();
+	//advance(it, choice - 1);
+	//return {*it, 1};
+	
+
+}
+
+
+bool computer_decision_make_it_trump(vector<Card> hand)
+{
+
+	// for now its just random for making it trump
+	int random_choice = rand() % 2;
+	return random_choice == 1 ? true : false;
+}
+
+pair<string, unsigned> computer_chooses_trump(vector<Card> hand)
+{
+	unordered_map<string, unsigned> eligible_suits;
+	unsigned choice_counter{ 1 };
+	for (Card const& c : hand)
+	{
+		auto insert_took_place = eligible_suits.insert({ c.suit, choice_counter });
+		if (insert_took_place.second)
+			choice_counter++;
+	}
+	
+
+	int choice;
+	// just random for now
+	choice = rand() % choice_counter + 1;
+	
+	for (pair<string, unsigned> p : eligible_suits)
+	{
+		if (p.second == choice)
+		{
+			//debug
+			cout << "Computer chose " << p.first << endl;
+			return { p.first, 1 };
+
+		}
+	}
+}
+
+
+
+pair<string, unsigned> second_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost)
+{
+	vector<Card> decision_table(5, Card({ "","" }));
+
+	// flip top card
+	//Card flipped_card = deck[0];
+	// decision_table[dealer] = flipped_card;
+	draw_v2(decision_table, dealer, "", your_team_score, enemy_team_score, tricks_won, tricks_lost);
+
+	// Ask each player if they want dealer to pick it up
+	unsigned starting_player = dealer == 4 ? 1 : dealer + 1;
+	unsigned current_player = starting_player;
+	bool picked_trump = false;
+	pair<string, unsigned> trump_and_chooser;
+	// unsigned player_who_decided_trump = 0;
+
+	//Card discarded_card;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (current_player == 1)
+		{
+			draw_hand(hands[1]);
+
+			picked_trump = player_prompt_make_it_trump(hands[1]);
+
+			if (picked_trump)
+			{
+				return player_chooses_trump(hands[1]);
+			}
+		}
+		else
+		{
+			picked_trump = computer_decision_make_it_trump(hands[current_player]);
+
+			if (picked_trump)
+			{
+				pair<string, unsigned> trump_and_player = computer_chooses_trump(hands[current_player]);
+
+				cout << "Player #" << current_player << " chose " << trump_and_player.first << " as trump" << endl;
+				return { trump_and_player };
+			}
+		}
+
+		// advance player cursor
+		current_player = current_player == 4 ? 1 : current_player + 1;
+	}
+	// If this makes it through all the players and no one picked up
+	return { "all_passed" , 0 };
+}
+
 
 Card computer_move(vector<Card>& hand, vector<Card>& trick, string trump)
 {

@@ -6,6 +6,8 @@
 #include <cstdio>
 #include <algorithm>
 #include <tuple>
+#include <set>
+#include <iterator>
 
 using namespace std;
 
@@ -48,5 +50,8 @@ void play_round(unsigned dealer, string trump, vector<Card>& deck, vector<vector
 vector<vector<Card>> deal_hands(vector<Card>& deck);
 
 pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost);
+
+pair<string, unsigned> second_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost);
+
 
 
