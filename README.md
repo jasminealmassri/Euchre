@@ -5,6 +5,11 @@ This is a simulator of the card game Euchre, written by Shahed Al Massri
 Currently the game can play a round of 5 tricks and determine the winner of a trick, and the winner of a round.
 There is a function to draw the trick at its current state as well as the player's hand when player is making a card selection
 
+Update May 5th 2024:
+- Computer can decide for first round and second round trump
+- Started building GUI in HTML, project will be refactored to javascript after logic is done in this C++ program
+
+
 Update March 18th 2024:
 - Added second round trump prompt and decision-making for both player and computer
 - Currently doesn't force dealer to choose trump if everyone passes, if everyone passes on the second round the game exits
@@ -16,8 +21,8 @@ Update March 12th 2024:
 - Next step to finish trump decision round is to add the second round where players can make trump any suit
 
 Next steps:
-- Trump decision making round (in progress)
-- Computer player's logic for trump selection
+~~-Trump decision making round (in progress)~~
+~~- Computer player's logic for trump selection~~
 - Computer player's logic for card selection
 - Input validation for user's card selection, card chosen must adhere to game rules
 - Add the ability for players to go alone 
