@@ -2,10 +2,10 @@
 
 
 
-void play_trick(vector<Card> hand1, vector<Card> hand2, vector<Card> hand3, vector<Card> hand4)
-{
-
-}
+//void play_trick(vector<Card> hand1, vector<Card> hand2, vector<Card> hand3, vector<Card> hand4)
+//{
+//
+//}
 
 
 
@@ -102,7 +102,7 @@ int main()
 	unsigned team2_score = 0;
 	unsigned tricks_won = 0;
 	unsigned tricks_lost = 0;
-	unsigned dealer = 4;
+	unsigned dealer = 2;
 
 	vector<vector<Card>> placeholder( 5, vector<Card>{{"",""}} );
 
@@ -131,8 +131,17 @@ int main()
 
 	string trump = decision.first;
 
-	// gotta put this in a loop where it keeps playing until the end of the game
+	// for the first round, the hands are already dealt
 	play_round(dealer, trump, deck, hands, team1_score, team2_score, tricks_won, tricks_lost);
+
+	while (team1_score < 10 && team2_score < 10)
+	{
+		// note**
+		// deck needs to be shuffled after the discarded cards are returnd
+		// deck is having the empty placeholders pushed back to it
+		hands = deal_hands(deck);
+		play_round(dealer, trump, deck, hands, team1_score, team2_score, tricks_won, tricks_lost);
+	}
 
 
 
