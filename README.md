@@ -7,7 +7,7 @@ There is a function to draw the trick at its current state as well as the player
 
 Update May 5th 2024:
 - Computer can decide for first round and second round trump
-- Started building GUI in HTML, project will be refactored in javascript after logic is completed in this C++ program
+- Started building GUI in HTML, project will be refactored in javascript after logic is completed in the C++ version
 
 
 Update March 18th 2024:
