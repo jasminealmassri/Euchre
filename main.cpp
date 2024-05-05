@@ -113,11 +113,12 @@ int main()
 	vector<vector<Card>> hands = deal_hands(deck);
 
 	// first pass decision
-	pair<string, unsigned> decision = first_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
+	Card flipped_card{};
+	pair<string, unsigned> decision = first_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost, flipped_card);
 
 	if (decision.first == "all_passed")
 	{
-		decision = second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
+		decision = second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost, flipped_card.suit);
 		// TO DO
 		// second_decision_round(deck, hands, dealer, team1_score, team2_score, tricks_won, tricks_lost);
 	}

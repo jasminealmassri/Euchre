@@ -633,7 +633,7 @@ void play_round(unsigned dealer, string trump, vector<Card>& deck, vector<vector
 
 }
 
-pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost)
+pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost, Card& flipped_card)
 {
 
 	// does shuffling need to happen here? 
@@ -641,7 +641,7 @@ pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Ca
 	vector<Card> decision_table(5, Card({ "","" }));
 
 	// flip top card
-	Card flipped_card = deck[0];
+	flipped_card = deck[0];
 	decision_table[dealer] = flipped_card;
 	draw_v2(decision_table, dealer, "", your_team_score, enemy_team_score, tricks_won, tricks_lost);
 
@@ -714,7 +714,7 @@ pair<string, unsigned> first_decision_round(vector<Card>& deck, vector<vector<Ca
 	// return { "", 0 };
 }
 
-pair<string, unsigned> second_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost)
+pair<string, unsigned> second_decision_round(vector<Card>& deck, vector<vector<Card>>& hands, unsigned dealer, unsigned your_team_score, unsigned enemy_team_score, unsigned tricks_won, unsigned tricks_lost, string suit_cant_be_trump)
 {
 	vector<Card> decision_table(5, Card({ "","" }));
 
@@ -747,7 +747,7 @@ pair<string, unsigned> second_decision_round(vector<Card>& deck, vector<vector<C
 		}
 		else
 		{
-			picked_trump = computer_decision_make_it_trump(hands[current_player]);
+			picked_trump = computer_decision_make_it_trump(hands[current_player], suit_cant_be_trump);
 
 			if (picked_trump)
 			{

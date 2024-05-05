@@ -39,14 +39,14 @@ double get_card_probability_win_based_on_hand(vector<Card> hand, int index, stri
 	card_ranks.push_back({ "10", hand[index].suit });
 	card_ranks.push_back({ "9", hand[index].suit });
 
-
+	int card_rank_index = 0;
 
 	for (int i = 0; i < card_ranks.size(); i++)
 	{
 		if (card_ranks[i] == hand[index])
 		{
 			num_cards_that_can_beat_this_card += i;
-
+			card_rank_index = i;
 			break;
 		}
 	}
@@ -65,12 +65,12 @@ double get_card_probability_win_based_on_hand(vector<Card> hand, int index, stri
 	}
 
 	// If the card isnt trump it should only be considered against its own suit
-	// e.g. the 9 of spades can't win anything if spades not trump
-	// theres better ways to do this but this will work for now
+			// e.g. the 9 of spades can't win anything if spades not trump
 	Card left_bower = { "Jack", offsuit };
 	if (hand[index].suit != trump && hand[index] != left_bower)
 	{
-		num_cards_that_can_beat_this_card += 14;
+		return ((double)(12 - (card_rank_index - 1)) / 12);
+		//num_cards_that_can_beat_this_card += 14;
 	}
 
 	return ((double)TOTAL_NUM_CARDS - num_cards_that_can_beat_this_card) / TOTAL_NUM_CARDS;
@@ -90,19 +90,57 @@ bool computer_decision_pick_it_up(vector<Card> hand, unsigned dealer, Card flipp
 
 	for (int i = 0; i < hand.size(); i++)
 	{
-		if (get_card_probability_win_based_on_hand(hand, i, flipped_card.suit) > 0.6)
+		if (get_card_probability_win_based_on_hand(hand, i, flipped_card.suit) > 0.50)
 		{
 			num_tricks_projected_win++;
 		}
 	}
+	// I probably should add something that considers what the card down is 
+	// for example it would tell someone else to pick up right bower which
+	// is only done under certain circumstances
+
 	return num_tricks_projected_win >= 3;
 }
 
-
-bool computer_decision_make_it_trump(vector<Card> hand)
+// This function sums up the probability of each card winning in a hand 
+double get_hand_probability_sum(vector<Card> hand, string trump)
 {
-	int random_choice = rand() % 2;
-	return random_choice == 1 ? true : false;
+	double sum{};
+	for (int i = 0; i < hand.size(); i++)
+	{
+		sum += get_card_probability_win_based_on_hand(hand, i, trump);
+	}
+	return sum;
+}
+
+bool computer_decision_make_it_trump(vector<Card> hand, string this_suit_cant_be_trump)
+{
+	vector<string> suits = {"Spades", "Diamonds", "Clubs", "Hearts"};
+	vector<double> hand_sums = {-1.0,-1.0,-1.0,-1.0};
+
+	for (int i = 0; i < suits.size(); i++)
+	{
+		if (suits[i] == this_suit_cant_be_trump)
+		{
+			continue;
+		}
+		else
+		{
+			hand_sums[i] = get_hand_probability_sum(hand, suits[i]);
+		}
+	}
+
+	double max_probability_sum = *max_element(hand_sums.begin(), hand_sums.end());
+
+	// change this threshold based on how the game plays out
+	if (max_probability_sum > 1.50)
+	{
+		return true;
+	}
+
+
+	//int random_choice = rand() % 2;
+	//return random_choice == 1 ? true : false;
 }
 
 Card computer_dealer_pick_up(vector<Card> hand, Card flipped_card)
