@@ -1,0 +1,203 @@
+body {
+    background-color: rgb(15, 60, 15);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+h3 {
+    color: white;
+    font-weight: normal;
+    text-shadow: 3px 3px 2px black;
+}
+
+.back_card img {
+    width: 60px;
+    height: auto;
+}
+
+
+#player-2-label {
+    position: absolute;
+    top: 50%;
+    left: 2%;
+}
+
+.player2_hand {
+
+    position: absolute;
+    top: 30%;
+    left: 12%;
+}
+
+.player2_hand .back_card:nth-child(1) {
+    position: absolute;
+    top: 0;
+}
+.player2_hand .back_card:nth-child(2) {
+    position: absolute;
+    top: 50px;
+}
+.player2_hand .back_card:nth-child(3) {
+    position: absolute;
+    top: 100px;
+}
+.player2_hand .back_card:nth-child(4) {
+    position: absolute;
+    top: 150px;
+}
+.player2_hand .back_card:nth-child(5) {
+    position: absolute;
+    top: 200px;
+}
+
+#player-4-label {
+    position: absolute;
+    top: 50%;
+    left: 90%;
+}
+
+.player4_hand {
+
+    position: absolute;
+    top: 30%;
+    left: 80%;
+}
+
+.player4_hand .back_card:nth-child(1) {
+    position: absolute;
+    top: 0;
+}
+.player4_hand .back_card:nth-child(2) {
+    position: absolute;
+    top: 50px;
+}
+.player4_hand .back_card:nth-child(3) {
+    position: absolute;
+    top: 100px;
+}
+.player4_hand .back_card:nth-child(4) {
+    position: absolute;
+    top: 150px;
+}
+.player4_hand .back_card:nth-child(5) {
+    position: absolute;
+    top: 200px;
+}
+
+#player-3-label {
+    position: absolute;
+    top: 1%;
+    left: 48%;
+}
+
+.player3_hand {
+    position: absolute;
+    top: 2%;
+    left: 55%;
+}
+
+.player3_hand .back_card:nth-child(1) {
+    position: absolute;
+    top: 0;
+}
+.player3_hand .back_card:nth-child(2) {
+    position: absolute;
+    left: 50px;
+}
+.player3_hand .back_card:nth-child(3) {
+    position: absolute;
+    left: 100px;
+}
+.player3_hand .back_card:nth-child(4) {
+    position: absolute;
+    left: 150px;
+}
+.player3_hand .back_card:nth-child(5) {
+    position: absolute;
+    left: 200px;
+}
+
+#player-1-label {
+    position: absolute;
+    top: 90%;
+    left: 45%;
+}
+
+
+.card {
+    transition: transform 0.3s;
+}
+
+.card img{
+    border: 1px solid black;
+    border-radius: 8%;
+    box-shadow: -1px -1px 1px black;
+   
+}
+
+.card:hover {
+    transform: translate(0%, -20%);
+}
+
+.card img {
+    width: 12vh;
+    height: auto;
+}
+
+
+.player1_hand {
+    display: flex;
+    position: absolute;
+    top: 74%;
+    left: 35%;
+    gap: 1%;
+}
+
+.player1_hand .card:nth-child(1) {
+    position: absolute;
+    top: 0;
+}
+.player1_hand .card:nth-child(2) {
+    position: absolute;
+    left: 70px;
+}
+.player1_hand .card:nth-child(3) {
+    position: absolute;
+    left: 140px;
+}
+.player1_hand .card:nth-child(4) {
+    position: absolute;
+    left: 210px;
+}
+.player1_hand .card:nth-child(5) {
+    position: absolute;
+    left: 280px;
+}
+
+/* playing table, need to delete after */
+.back_card:nth-child(5) img {
+    width: 14vh;
+    height: auto;
+}
+
+/* .card:nth-child(5) img {
+    width: 14vh;
+    height: auto;
+} */
+
+.player1_hand .card:nth-child(5){
+    transition: transform 0.1s linear;
+}
+
+/* .player1_hand .card:nth-child(5) {
+    transform: translate(-135%, -120%);
+} */
+.player2_hand .back_card:nth-child(5) {
+    transform: translate(400%, -120%);
+}
+.player3_hand .back_card:nth-child(5) {
+    transform: translate(-370%, 50%);
+}
+.player4_hand .back_card:nth-child(5) {
+    transform: translate(-450%, -120%);
+}
+
