@@ -1,4 +1,4 @@
-This is a simulator of the card game Euchre, written by Shahed Al Massri
+This is a simulator of the card game Euchre, written by Jasmine Al Massri
 
 ♠️♦️♣️♥️
 
